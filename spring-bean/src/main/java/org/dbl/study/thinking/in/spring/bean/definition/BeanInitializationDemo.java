@@ -5,6 +5,7 @@ import org.dbl.study.thinking.in.spring.bean.factory.UserFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * ClassName: BeanInitalizationDemo <br>
@@ -27,9 +28,23 @@ public class BeanInitializationDemo {
     //    在此处被设置
     // (1.0 版本)org.springframework.beans.factory.support.AbstractBeanDefinition.setInitMethodName
     // (5.1 版本)org.springframework.beans.factory.config.BeanDefinition.setInitMethodName
+
+    // 非延迟初始化在 Spring 应用上下文启动完成后，被初始化
+    System.out.println("Spring 应用上下文已启动 ...");
+
+    //    // Instantiate all remaining (non-lazy-init) singletons.
+    //       AbstractApplicationContext#finishBeanFactoryInitialization
+    //      ->  // Instantiate all remaining (non-lazy-init) singletons.
+    //              beanFactory.preInstantiateSingletons();
+
+    UserFactory userFactory = applicationContext.getBean(UserFactory.class);
+    System.out.println(userFactory);
+
+    applicationContext.close();
   }
 
   @Bean(initMethod = "initUserFactory")
+  @Lazy
   public UserFactory userFactory() {
     return new DefaultUserFactory();
   }
