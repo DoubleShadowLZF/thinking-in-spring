@@ -1,4 +1,4 @@
-package org.dbl.study.thinking.in.spring.container;
+package org.dbl.study.thinking.in.spring.bean.definition;
 
 import org.dbl.study.thinking.in.spring.domain.User;
 import org.springframework.beans.factory.BeanFactory;
