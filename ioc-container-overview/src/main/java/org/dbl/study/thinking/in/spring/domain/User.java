@@ -12,6 +12,13 @@ public class User {
   private Long id;
   private String name;
 
+  public static User createUser() {
+    User user = new User();
+    user.setId(1L);
+    user.setName("句号君");
+    return user;
+  }
+
   public Long getId() {
     return id;
   }
