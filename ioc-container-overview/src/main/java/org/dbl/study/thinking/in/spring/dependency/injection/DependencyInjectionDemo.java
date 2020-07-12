@@ -34,7 +34,7 @@ public class DependencyInjectionDemo {
     //    System.out.println(userRepository.getUsers());
     //    依赖来源二：依赖注入（内建依赖）
     System.out.println(userRepository.getBeanFactory());
-    //    System.out.println(userRepository.getBeanFactory() == beanFactory);
+    whoIsIoCContainer(beanFactory, userRepository);
 
     //    依赖查找（错误）
     //    System.out.println(beanFactory.getBean(BeanFactory.class));
@@ -51,5 +51,10 @@ public class DependencyInjectionDemo {
     //    依赖来源三： 容器内建 Bean
     Environment environment = beanFactory.getBean(Environment.class);
     System.out.println("获取 Environment 类型的 Bean:" + environment);
+  }
+
+  private static void whoIsIoCContainer(BeanFactory beanFactory, UserRepository userRepository) {
+    // 为什么这个表达式不会成立
+    System.out.println(userRepository == beanFactory);
   }
 }
