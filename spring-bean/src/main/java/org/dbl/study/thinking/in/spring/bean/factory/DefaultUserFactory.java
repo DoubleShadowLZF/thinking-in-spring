@@ -1,9 +1,11 @@
 package org.dbl.study.thinking.in.spring.bean.factory;
 
 import org.dbl.study.thinking.in.spring.domain.User;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * ClassName: DefaultUserFactory <br>
@@ -13,7 +15,7 @@ import javax.annotation.PostConstruct;
  * @author Double <br>
  * @since JDK 1.8
  */
-public class DefaultUserFactory implements UserFactory, InitializingBean {
+public class DefaultUserFactory implements UserFactory, InitializingBean, DisposableBean {
   @Override
   public User createUser() {
     return User.createUser();
@@ -33,5 +35,20 @@ public class DefaultUserFactory implements UserFactory, InitializingBean {
   @Override
   public void afterPropertiesSet() throws Exception {
     System.out.println("InitializingBean#afterPropertiesSet() : UserFactory 初始化中 ... ... ");
+  }
+
+  @PreDestroy
+  public void preDestroy() {
+    System.out.println("@PreDestroy ： UserFactory 销毁中 .... ... ");
+  }
+
+  @Override
+  public void destroy() throws Exception {
+    System.out.println("DisposableBean#destroy() : UserFactory 销毁中 ... ... ");
+  }
+
+  @Override
+  public void doDestroy() {
+    System.out.println("自定义 doDestroy() : UserFactory 销毁中 ... ... ");
   }
 }
