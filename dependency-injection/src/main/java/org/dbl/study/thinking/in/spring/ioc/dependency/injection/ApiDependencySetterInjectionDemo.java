@@ -54,6 +54,7 @@ public class ApiDependencySetterInjectionDemo {
   private static BeanDefinition createUserHolderBeanDefinition() {
     BeanDefinitionBuilder definitionBuilder =
         BeanDefinitionBuilder.genericBeanDefinition(UserHolder.class);
+    // ref 实际上就是 xml 中 ref属性的底层实现
     definitionBuilder.addPropertyReference("user", "superUser");
     return definitionBuilder.getBeanDefinition();
   }
