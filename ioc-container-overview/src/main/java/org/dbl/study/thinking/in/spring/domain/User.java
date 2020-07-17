@@ -1,5 +1,8 @@
 package org.dbl.study.thinking.in.spring.domain;
 
+import org.dbl.study.thinking.in.spring.enums.City;
+import org.springframework.core.io.Resource;
+
 /**
  * ClassName: User <br>
  * Description: 用户类<br>
@@ -11,6 +14,10 @@ package org.dbl.study.thinking.in.spring.domain;
 public class User {
   private Long id;
   private String name;
+
+  private City city;
+
+  private Resource configFileLocation;
 
   public static User createUser() {
     User user = new User();
@@ -35,8 +42,35 @@ public class User {
     this.name = name;
   }
 
+  public City getCity() {
+    return city;
+  }
+
+  public void setCity(City city) {
+    this.city = city;
+  }
+
+  public Resource getConfigFileLocation() {
+    return configFileLocation;
+  }
+
+  // 基础类型的注入
+  public void setConfigFileLocation(Resource configFileLocation) {
+    this.configFileLocation = configFileLocation;
+  }
+
   @Override
   public String toString() {
-    return "User{" + "id=" + id + ", name='" + name + '\'' + '}';
+    return "User{"
+        + "id="
+        + id
+        + ", name='"
+        + name
+        + '\''
+        + ", city="
+        + city
+        + ", configFileLocation="
+        + configFileLocation
+        + '}';
   }
 }

@@ -7,6 +7,8 @@
     <bean id="user" class="org.dbl.study.thinking.in.spring.domain.User">
         <property name="id" value="1"/>
         <property name="name" value="句号君"/>
+        <property name="city" value="GUANGZHOU"/>
+        <property name="configFileLocation" value="classpath:/META-INF/user-config.properties"/>
     </bean>
 
     <bean id="objectFactory"
