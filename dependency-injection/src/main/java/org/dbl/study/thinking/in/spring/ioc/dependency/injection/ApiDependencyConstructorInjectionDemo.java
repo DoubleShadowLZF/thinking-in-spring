@@ -1,26 +1,30 @@
 package org.dbl.study.thinking.in.spring.ioc.dependency.injection;
 
-import org.dbl.study.thinking.in.spring.domain.User;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
 
 /**
  * ClassName: XmlDependencySetterInjectionDemo <br>
- * Description: 基于 Java 注解资源的依赖 Setter 方法注入示例 <br>
- * date: 2020/7/17 0:20<br>
+ * Description: 基于 API 资源的依赖 Constructor 方法注入示例 <br>
+ * date: 2020/7/17 23:09<br>
  *
  * @author Double <br>
  * @since JDK 1.8
  */
-public class AnnotationDependencySetterInjectionDemo {
+public class ApiDependencyConstructorInjectionDemo {
   public static void main(String[] args) {
     // 创建 BeanFactory 容器
     AnnotationConfigApplicationContext applicationContext =
         new AnnotationConfigApplicationContext();
 
     // 将当前类 BeanInitializationDemo 作为配置类（Configuration Class）
-    applicationContext.register(AnnotationDependencySetterInjectionDemo.class);
+    //    applicationContext.register(ApiDependencySetterInjectionDemo.class);
+
+    // 注册 UserHolder 的 BeanDefinition
+    BeanDefinition userHolderBeanDefinition = createUserHolderBeanDefinition();
+    applicationContext.registerBeanDefinition("userHolder", userHolderBeanDefinition);
 
     XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(applicationContext);
 
@@ -42,10 +46,21 @@ public class AnnotationDependencySetterInjectionDemo {
     applicationContext.close();
   }
 
-  @Bean
-  public UserHolder userHolder(User user) {
-    UserHolder userHolder = new UserHolder();
-    userHolder.setUser(user);
-    return userHolder;
+  /**
+   * 为 {@link UserHolder} 生成 {@link BeanDefinition}
+   *
+   * @return
+   */
+  private static BeanDefinition createUserHolderBeanDefinition() {
+    BeanDefinitionBuilder definitionBuilder =
+        BeanDefinitionBuilder.genericBeanDefinition(UserHolder.class);
+    // ref 实际上就是 xml 中 ref属性的底层实现
+    definitionBuilder.addPropertyReference("user", "superUser");
+    return definitionBuilder.getBeanDefinition();
   }
+
+  //  @Bean
+  //  public UserHolder userHolder(User user) {
+  //    return new UserHolder(user);
+  //  }
 }
