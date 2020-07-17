@@ -10,5 +10,6 @@ package org.dbl.study.thinking.in.spring.enums;
  */
 public enum City {
   GUANGZHOU,
-  SHENZHEN;
+  SHENZHEN,
+  BEIJING;
 }

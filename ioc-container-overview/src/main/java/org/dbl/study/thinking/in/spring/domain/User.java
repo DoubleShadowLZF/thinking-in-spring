@@ -3,6 +3,9 @@ package org.dbl.study.thinking.in.spring.domain;
 import org.dbl.study.thinking.in.spring.enums.City;
 import org.springframework.core.io.Resource;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * ClassName: User <br>
  * Description: 用户类<br>
@@ -16,6 +19,11 @@ public class User {
   private String name;
 
   private City city;
+
+  // 数组类型
+  private City[] workCites;
+
+  private List<City> lifeCities;
 
   private Resource configFileLocation;
 
@@ -50,6 +58,22 @@ public class User {
     this.city = city;
   }
 
+  public City[] getWorkCites() {
+    return workCites;
+  }
+
+  public void setWorkCites(City[] workCites) {
+    this.workCites = workCites;
+  }
+
+  public List<City> getLifeCities() {
+    return lifeCities;
+  }
+
+  public void setLifeCities(List<City> lifeCities) {
+    this.lifeCities = lifeCities;
+  }
+
   public Resource getConfigFileLocation() {
     return configFileLocation;
   }
@@ -69,6 +93,10 @@ public class User {
         + '\''
         + ", city="
         + city
+        + ", workCites="
+        + Arrays.toString(workCites)
+        + ", lifeCities="
+        + lifeCities
         + ", configFileLocation="
         + configFileLocation
         + '}';
