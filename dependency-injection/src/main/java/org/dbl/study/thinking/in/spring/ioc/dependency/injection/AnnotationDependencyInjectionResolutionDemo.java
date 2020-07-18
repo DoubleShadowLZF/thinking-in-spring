@@ -1,13 +1,20 @@
 package org.dbl.study.thinking.in.spring.ioc.dependency.injection;
 
 import org.dbl.study.thinking.in.spring.domain.User;
+import org.dbl.study.thinking.in.spring.ioc.dependency.injection.annotation.InjectedUser;
+import org.dbl.study.thinking.in.spring.ioc.dependency.injection.annotation.MyAutowired;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigUtils;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import javax.inject.Inject;
-import java.util.Map;
-import java.util.Optional;
+import java.lang.annotation.Annotation;
+import java.util.*;
 
 /**
  * ClassName: AnnotationDependencyInjectionResolutionDemo <br>
@@ -32,7 +39,42 @@ public class AnnotationDependencyInjectionResolutionDemo {
   @Autowired // 集合类型依赖注入
   private Map<String, User> users; // user superUser
 
-  @Autowired private Optional<User> optionalUser;
+  @MyAutowired private Optional<User> optionalUser;
+
+  @InjectedUser private User myInjectedUser;
+
+  // static 关键字将 Bean 的初始化，提前到 AnnotationDependencyInjectionResolutionDemo 装载前
+  //  @Bean(name = AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME)
+  //  public static AutowiredAnnotationBeanPostProcessor beanPostProcessor() {
+  //    AutowiredAnnotationBeanPostProcessor beanPostProcessor =
+  //        new AutowiredAnnotationBeanPostProcessor();
+  //    // @Autowired + @Injected + 新的注解 @InjectedUser
+  //    Set<Class<? extends Annotation>> autowiredAnnotationTypes =
+  //        new LinkedHashSet<>(Arrays.asList(Autowired.class, Inject.class, InjectedUser.class));
+  //    beanPostProcessor.setAutowiredAnnotationTypes(autowiredAnnotationTypes);
+  //    return beanPostProcessor;
+  //  }
+
+  /**
+   * 由于优先级比 {@link AutowiredAnnotationBeanPostProcessor} 低，且 Bean 名称不为 {@link
+   * AnnotationConfigUtils#AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME} ，则 Spring 容器中同时存在两个
+   * AutowiredAnnotationBeanPostProcessor，且自定义的 AutowiredAnnotationBeanPostProcessor 优先级比 Spring
+   * 官方提供的 AutowiredAnnotationBeanPostProcessor 优先级高
+   *
+   * @see AutowiredAnnotationBeanPostProcessor#order
+   * @see AnnotationConfigUtils#AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME
+   */
+  @Bean
+  @Order(Ordered.LOWEST_PRECEDENCE - 3)
+  public static AutowiredAnnotationBeanPostProcessor beanPostProcessor() {
+    AutowiredAnnotationBeanPostProcessor beanPostProcessor =
+        new AutowiredAnnotationBeanPostProcessor();
+    // @Autowired + @Injected + 新的注解 @InjectedUser
+    Set<Class<? extends Annotation>> autowiredAnnotationTypes =
+        new LinkedHashSet<>(Arrays.asList(Autowired.class, Inject.class, InjectedUser.class));
+    beanPostProcessor.setAutowiredAnnotationTypes(autowiredAnnotationTypes);
+    return beanPostProcessor;
+  }
 
   public static void main(String[] args) {
     // 创建 BeanFactory 容器
@@ -65,6 +107,8 @@ public class AnnotationDependencyInjectionResolutionDemo {
     System.out.println("demo.users = " + demo.users);
     // 期待输出 optionalUser Bean
     System.out.println("demo.optionalUser = " + demo.optionalUser);
+    // 期待输出 superUser Bean
+    System.out.println("demo.myInjectedUser = " + demo.myInjectedUser);
 
     //    关闭应用上下文
     applicationContext.close();
