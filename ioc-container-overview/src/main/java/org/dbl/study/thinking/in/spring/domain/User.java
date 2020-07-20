@@ -1,8 +1,11 @@
 package org.dbl.study.thinking.in.spring.domain;
 
 import org.dbl.study.thinking.in.spring.enums.City;
+import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.core.io.Resource;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +17,7 @@ import java.util.List;
  * @author Double <br>
  * @since JDK 1.8
  */
-public class User {
+public class User implements BeanNameAware {
   private Long id;
   private String name;
 
@@ -26,6 +29,8 @@ public class User {
   private List<City> lifeCities;
 
   private Resource configFileLocation;
+
+  private transient String beanName;
 
   public static User createUser() {
     User user = new User();
@@ -100,5 +105,19 @@ public class User {
         + ", configFileLocation="
         + configFileLocation
         + '}';
+  }
+
+  @PostConstruct
+  public void init() {
+    System.out.println("用户 Bean [" + beanName + "] 初始化...");
+  }
+
+  @PreDestroy
+  public void destroy() {
+    System.out.println("用户 Bean [" + beanName + "] 销毁...");
+  }
+
+  public void setBeanName(String name) {
+    this.beanName = name;
   }
 }
