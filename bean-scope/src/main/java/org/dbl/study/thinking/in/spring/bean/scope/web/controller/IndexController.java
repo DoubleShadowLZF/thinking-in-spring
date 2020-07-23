@@ -21,7 +21,9 @@ public class IndexController {
 
   @GetMapping("/")
   public String index(Model model) {
-    model.addAttribute("user", user);
+    // userObject -> 渲染上下文
+    // user 对象存在 ServletContext, 上下文名称： scopedTarget.user == 新生成 Bean 名称
+    model.addAttribute("userObject", user);
     System.out.println("返回前台页面的 User Bean : " + user.hashCode());
     return "index";
   }

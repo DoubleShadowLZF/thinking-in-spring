@@ -13,5 +13,7 @@
 <body>
 <h2>Spring Scope</h2>
 <h4>\${user.name} : ${user.name}</h4>
+<h4>\${userObject.name} : ${userObject.name}</h4>
+<h4>\${applicationScope['scopedTarget.user'].name} : ${applicationScope['scopedTarget.user'].name}</h4>
 </body>
 </html>
